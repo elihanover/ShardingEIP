@@ -72,13 +72,13 @@ Note that the number of additional periods is roughly proportional to the ```gas
 
 
 #### Routing Transactions into These Differing Shards
-
+Does this just take care of itself?  Validators of specific shard will accept if they have enough gas...but this makes me wonder..I changed the gas limit on the VMC, but does that do enough?  Hmm...well there's only a cap on the gas, so I guess it should work out?  How to avoid collator processing less, or do the transaction gas prices just take care of it?  I guess these larger gas transactions will bounce around until a higher gas_limit shard "picks it up", so it should work out in theory.
 
 # Rationale
 
 
 # Backward Compatibility
-
+There should not be any backwards compatibility issues.  This is merely a change to a few VMC parameter values and conditions.
 
 # Test Cases
 
