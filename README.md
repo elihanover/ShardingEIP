@@ -38,16 +38,16 @@ These concerns suggest a few necessary changes to other parts of the VMC, includ
 
 #### Shard Gas Limit Data Structure
 Instead of gas_limit being a constant, we must store the gas_limit for each shard. i.e, replace
-```
+``` python
 def get_collation_gas_limit() -> int128:
     return 10000000
 ```
 with
-```
+``` python
 gas_limits: int128[self.SHARD_COUNT]
 ```
 in which the values would be set manually (although potential for a voting mechanic exists, that can be discussed elsewhere).
-```
+``` python
 def get_collation_gas_limit(shard_id):
     return gas_limits[shard_id]
 ```
@@ -58,7 +58,7 @@ where gas_limits is initialized as a global array with the indexes corresponding
 
 #### Proportional Period Publishing
 In ```add_header(...)``` function of VMC, change condition that the collator is sending ```add_header(...)``` transaction in it's one allocated period to allow for submission up to floor(get_collation_gas_limit(shard_id)/10000000)-1 periods ahead.  In other words,
-``` vyper
+``` python
 # expected_period_number == this period number
 assert expected_period_number == floor(block.number /self.PERIOD_LENGTH)
 ```
