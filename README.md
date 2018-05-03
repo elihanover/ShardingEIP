@@ -58,12 +58,12 @@ where gas_limits is initialized as a global array with the indexes corresponding
 
 #### Proportional Period Publishing
 In ```add_header(...)``` function of VMC, change condition that the collator is sending ```add_header(...)``` transaction in it's one allocated period to allow for submission up to floor(get_collation_gas_limit(shard_id)/10000000)-1 periods ahead.  In other words,
-```
+``` vyper
 # expected_period_number == this period number
 assert expected_period_number == floor(block.number /self.PERIOD_LENGTH)
 ```
 becomes
-```
+``` python
 # expected_period_number <= this period number <= expected_period_number + additional periods permitted
 assert expected_period_number >= floor(block.number/self.PERIOD_LENGTH)
 assert floor(block.number/self.PERIOD_LENGTH) <= expected_period_number + floor(get_collation_gas_limit/10000000)
