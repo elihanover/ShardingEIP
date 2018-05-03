@@ -54,6 +54,11 @@ def get_collation_gas_limit(shard_id):
 where gas_limits is initialized as a global array with the indexes corresponding to the shard_id and the value representing the gas limit of that shard.
 
 #### Collator Reward Function Implementation
+Wherever the reward is applied....
+``` python
+reward = 0.001 * get_collation_gas_limit(shard_id) / 10000000
+```
+Note: do I want to floor this or no?  I figure the gas_limits will be multiples, but if not, do I want do floor or not?  Flooring means slightly less reward, and I think everything should be directly proportional, so I think not flooring is better.
 
 
 #### Proportional Period Publishing
