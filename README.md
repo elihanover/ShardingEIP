@@ -10,7 +10,9 @@ created: 2018-05-03
 
 
 # Simple Summary
-
+Heterogeneous Sharding allows for shards to have different properties from each other.
+More specifically, this discusses the potential for differing gas limits between
+shards to allow for higher gas transactions without sacrificing block latency.
 
 
 # Abstract
@@ -45,17 +47,16 @@ def get_collation_gas_limit() -> int128:
 ```
 with
 ``` python
-gas_limits: int128[self.SHARD_COUNT]
-```
-in which the values would be set manually (although potential for a voting mechanic exists, that can be discussed elsewhere).
-``` python
 def get_collation_gas_limit(shard_id):
-    return gas_limits[shard_id]
+    return self.GAS_LIMITS[shard_id]
 ```
-where gas_limits is initialized as a global array with the indexes corresponding to the shard_id and the value representing the gas limit of that shard.
-
-Note that this also means that the collator must also pass their shard's ```shard_id``` to ```get_collation_gas_limit(...)```, in order to retrieve the shard's specific ```gas_limit```.
-
+where GAS_LIMITS is just added as a parameter to the contract constructor
+``` python
+_GAS_LIMITS: int128[self._SHARD_COUNT]
+```
+```python
+self.GAS_LIMITS = _SHARD_COUNT
+```
 
 #### Collator Reward Function Implementation
 Wherever the reward is applied....set the reward proportional to the gas limit of that shard.
