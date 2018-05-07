@@ -1,6 +1,6 @@
 ---
 eip: TBD
-title: Varying Gas Limit for Shards
+title: Varying Collation Body Size for Shards
 author: Eli Hanover <eli.hanover@emory.edu>
 type: Standards Track
 category: Core
@@ -10,34 +10,37 @@ created: 2018-05-03
 
 
 # Simple Summary
-Heterogeneous Sharding allows for shards to have different properties from each other.
-More specifically, this discusses the potential for differing gas limits between
-shards to allow for higher gas transactions without sacrificing block latency.
+Heterogeneous Sharding allows for shards to have different properties from each other.  More specifically, this discusses the potential for differing collation body sizes between shards to allow for higher gas transactions without sacrificing block latency.
 
 
 # Abstract
-This draft EIP proposes and discusses the details of implementing varying gas limits in the Validator Manager Contract (VMC) in Phase 1 of Ethereum's sharding implementation.  By allowing collators time to submit collation headers proportional to the gas limit of their shard, this would raise the gas_limit cap on transactions while maintaining the same period length and without sacrificing decentralization.
+This draft EIP proposes and discusses the details of implementing varying collation body sizes into the Validator Manager Contract (VMC) in Phase 1 of Ethereum's sharding implementation.  By allowing collators time to submit collation headers proportional to the size of their shard's collation body, this would raise the gas_limit cap on transactions while maintaining the same period length and without sacrificing decentralization.
 
 
 # Motivation
-By allowing for variable gas limits between shards, we can permit higher gas transactions without altering the period length.  Doing so allows for more expensive state changes on some shards that are independent of lower gas_limit shards.
+By allowing for variable collation body sizes between shards, we can permit higher gas transactions without altering the period length.  Doing so allows for more expensive state changes on some shards that are independent of smaller collation body shards.
 
 
 
 # Specification and Rationale
 #### Initial Concerns and How to Ameliorate Them
-If we were to simply specify higher gas limits for a select few  shards in the VMC, this would require proportionally higher computational resources of the collators of these higher gas limit shards.  This has multiple issues.  First, if we do not change the collator's reward proportional to the increase in resources needed to validate this collation, there is less incentive to solve for the collation header, potentially increasing dropout in specific shards.  This could ultimately lead to shards not being solved.  Additionally, the added computational resources needed could cause collators who did want to solve the collation header to nonetheless fail to because of the time restraint.  In essence,
-the requirements and rewards of shards should be proportional to the gas_limit of that shard.
+If we were to simply specify higher collation body sizes for a select few shards in the VMC, this would require proportionally higher computational resources of the executors of these higher gas limit shards.  In addition, notaries would be unable to download collation bodies within the notary burst overhead.  There are multiple issues here.  First, if we do not change the executors' reward proportional to the increase in resources needed to validate this collation, there is less incentive to execute the appropriate state transition function, potentially resulting in "abandoned" collations in specific shards.  Additionally, the added computational resources needed could cause executors who did want to solve the collation header to nonetheless fail because of the time restraint imposed by periods.  In essence,
+the requirements and rewards of shards should be proportional to the size of the collation body of that shard.
 
 These concerns suggest a few necessary changes to other parts of the VMC, including:
-1. Change the condition that collators must publish their collation header within their allocated period to one that allows them the ability to publish in an extended range of periods proportional to the gas limit of the shard they are validating.
-2. Change the collators' reward to an amount proportional to the gas limit of the shard being validated in order to keep collators' incentives equal across shards.
+1. Set the notary burst overhead proportional to the collation body size of the specified shard to allow notaries sufficient time to download the collation body and vote.
+2. Set the notaries' reward proportional to the collation body size of the respective shard.
+3. Reward the executors proportional to the collation body size. (?)
+4. Grant executors time proportional to the collation body size. (?)
 
+##### In essence, set the proposal, notary, execution time line proportional the collation size of its shard.  Note that this means that notaries must be given access to submit collation headers in a range of periods.
+Note that granting validators the status of notary for more than one period interferes with proposed sampling schemes, as we cannot sample from the full set of validators in the validator pool.  This raises the question of whether this makes coordinated attacks on the sampling mechanism possible. (NEXT: look into this)
 
 #### Required Changes to the VMC
-1. VMC must store the gas limit of each shard.
-2. Change collator's reward to a function of the gas limit of the respective shard.
-3. Change condition that collators must publish collation headers within their one allocated period to grant them publishing ability in the next N shards, in which N is proportional to the gas limit of the shard they are validating.
+1. VMC must store the collation size of each shard.
+2. Change notaries' and executors' reward to a function of the collation body size of the respective shard.
+3. Change condition that notaries must publish collation headers within their one allocated period to grant them publishing ability in the next N shards, in which N is proportional to the collation body size of the shard they are validating.
+4. Set the notary burst overhead proportional to the collation body size of the respective shard.
 
 #### Shard Gas Limit Data Structure
 Instead of gas_limit being a constant, we must store the gas_limit for each shard. i.e, replace
@@ -94,3 +97,7 @@ There should not be any backwards compatibility issues.  This is merely a change
 
 
 # Copyright Waiver
+
+# Questions for myself
+- what is the 10 millions number then if collation bodies don't have gas limits?
+-
