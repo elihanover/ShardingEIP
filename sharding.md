@@ -1,7 +1,7 @@
 # Sharding 101 Notebook
 ---
-### Ethereum's Scaling Problem
----
+## Ethereum's Scaling Problem
+
 - Current implementation of Ethereum designed to scale at O(c), where c = resources of an average node
 
 - More specifically, ***every validating node processes every transaction and stores state of the main chain***
@@ -12,8 +12,8 @@
   - But leaves us currently at *7-15 tx/s* as opposed to Visa's *24,000 tx/s*
 
 ---
-### Sharding's Approach to This Problem:
----
+## Sharding's Approach to This Problem:
+
 - Parallelize chain into n ***shards*** (100 planned at the moment)
 - Each shard is its own chain of accounts and transactions
 - Main just only used to store "block" headers*
@@ -22,24 +22,24 @@
 - Often called *quadratic sharding* because...¿?
 
 ---
-### Sharding 101
-___
+## Sharding 101
+
 ![Sharding Diagram](flowchart.jpg)
 
-#### *Collation*
+### *Collation*
 ![Collation]()
 
-#### *Proposer*
+### *Proposer*
 - Connects to running ethereum node and collects transactions into collations (again, just a shard block)
 - Gathers ~1Mb of transactions
 - Does NOT execute them, just collects
 - Submits collation header to the main chain, specifically the SMC
 
-#### *SMC (Sharding Manager Contract)*
+### *SMC (Sharding Manager Contract)*
 - Smart contract (in first implementation) that manages shards
 - Collects collation headers from the proposers so that notaries can vote on them
 
-#### *Notaries*
+### *Notaries*
 - Vote on the collation proposed collation headers in each shard
 - Randomly sampled from the validator pool
     - Phase 1: stake ether into the contract to be selected
@@ -55,23 +55,23 @@ ___
     - *At most one collation per shard per period*
 
 ---
-### SMC Implementation
----
+## SMC Implementation
+
 
 ---
-### Proposer Client
----
+## Proposer Client
+
 
 ---
-### Notary Client
----
+## Notary Client
+
 
 ---
-### Beyond Phase 1
----
+## Beyond Phase 1
+
 
 ---
-### Discussion
+## Discussion
 ###### Heterogenous Sharding
 ###### Governance
 ---
