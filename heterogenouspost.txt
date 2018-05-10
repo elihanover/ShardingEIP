@@ -1,0 +1,26 @@
+Heterogeneous sharding can be used to allow higher gas(does gas still exist?)
+transactions without affecting block latency.
+
+Under the current Phase 1 implementation, we have collation body sizes of each shard
+fixed at 1MB.  By allowing different shards different (but fixed) collation sizes,
+we can allow higher gas transactions on certain shards, without altering period
+length.
+
+Instead of altering period length, we can instead grant notaries the ability to
+submit collation headers up to floor(collation_size/1MB) - 1 periods ahead.
+
+Additionally, we need to reward notaries proportional to the collation size of
+the shard they have been assigned to to account for the additional time to download
+and vote on the collation.
+
+We also need to set the notary burst overhead to be proportional to the collation
+size as well in order to give notaries time to download transactions.
+
+The main issue at hand is whether this interferes with random sampling
+from the validator pool and consequently allows coordinated attacks on shards.
+[why it doesn't matter for sampling and collusion that we do this.]
+
+Another concern is whether 
+
+The other concern is determining the appropriate collation sizes for an appropriate
+distribution of shards.
