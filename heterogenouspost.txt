@@ -6,6 +6,8 @@ fixed at 1MB.  By allowing different shards different (but fixed) collation size
 we can allow higher gas transactions on certain shards, without altering period
 length.
 
+[make a case for why this is so important]
+
 Instead of altering period length, we can instead grant notaries the ability to
 submit collation headers up to floor(collation_size/1MB) - 1 periods ahead.
 
@@ -20,7 +22,13 @@ The main issue at hand is whether this interferes with random sampling
 from the validator pool and consequently allows coordinated attacks on shards.
 [why it doesn't matter for sampling and collusion that we do this.]
 
-Another concern is whether 
+Another concern of heterogeneous sharding is dealing with preferences for accounts
+on certain shards.  A contract that doesn't require high gas transactions would
+be better off on a low collation body size shard that will be verified every
+period.  Assuming cross shard transactions, however, this should not be a problem,
+as we can model the shard properties.  For example, the example above suggests
+that we most likely would want to keep the vast majority of shards at the 1Mb
+size such that they can be verified every period.
 
 The other concern is determining the appropriate collation sizes for an appropriate
 distribution of shards.
