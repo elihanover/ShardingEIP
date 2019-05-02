@@ -89,15 +89,3 @@ Additionally, does the collator need to know their allocated period length?  In 
 
 # Backward Compatibility
 There should not be any backwards compatibility issues.  This is merely a change to a few VMC parameter values and conditions.
-
-# Test Cases
-
-
-# Implementations
-
-
-# Copyright Waiver
-
-# Questions for myself
-- what is the 10 millions number then if collation bodies don't have gas limits?
--
